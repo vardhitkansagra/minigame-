@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Click the Box Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #gameArea {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 20px auto;
+      border: 2px solid #333;
+      background-color: #fff;
+    }
+    .box {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #4CAF50;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #score {
+      font-size: 24px;
+      margin: 20px;
+    }
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Click the Box Game 🎯</h1>
+  <button id="startBtn">Start Game</button>
+  <div id="score">Score: 0</div>
+  <div id="gameArea"></div>
+
+  <script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreEl = document.getElementById('score');
+    const startBtn = document.getElementById('startBtn');
+    let score = 0;
+    let gameTimer;
+
+    function randomPosition() {
+      const x = Math.random() * (gameArea.clientWidth - 50);
+      const y = Math.random() * (gameArea.clientHeight - 50);
+      return { x, y };
+    }
+
+    function createBox() {
+      const box = document.createElement('div');
+      box.classList.add('box');
+      const { x, y } = randomPosition();
+      box.style.left = `${x}px`;
+      box.style.top = `${y}px`;
+      box.addEventListener('click', () => {
+        score++;
+        scoreEl.textContent = `Score: ${score}`;
+        gameArea.removeChild(box);
+        createBox();
+      });
+      gameArea.appendChild(box);
+    }
+
+    function startGame() {
+      score = 0;
+      scoreEl.textContent = `Score: ${score}`;
+      gameArea.innerHTML = '';
+      createBox();
+      gameTimer = setTimeout(() => {
+        gameArea.innerHTML = '';
+        alert(`⏳ Time's up! Your score: ${score}`);
+      }, 30000); // 30 seconds
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>
